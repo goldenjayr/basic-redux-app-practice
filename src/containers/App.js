@@ -1,10 +1,21 @@
-import React from 'react'
+import React, {lazy, Suspense} from 'react'
 
-import Main from '../components/Main'
-import User from '../components/User'
+import { css } from '@emotion/core'
+import { DotLoader } from 'react-spinners'
+
+// import Main from '../components/Main'
+// import User from '../components/User'
+
+const Main = lazy(() => import('../components/Main'))
+const User = lazy(() => import('../components/User'))
 
 import {connect} from 'react-redux'
 
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 const App = (props) => {
 
@@ -12,8 +23,16 @@ const App = (props) => {
 
     return(
         <div>
-            <Main />
-            <User userName={props.userName} />
+            <Suspense fallback={<DotLoader 
+                css={override}
+                sizeUnit={"px"}
+                size={70}
+                color={'#123abc'}
+                loading={true}
+             />}>
+                <Main />
+                <User userName={props.userName} />
+            </Suspense>
         </div>
     )
 }

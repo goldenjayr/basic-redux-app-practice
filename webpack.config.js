@@ -1,11 +1,11 @@
 const path = require('path')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 
 module.exports = {
-    mode: 'development',
+    mode: process.env.NODE_ENV || 'development',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[hash].bundle.js'
@@ -21,21 +21,25 @@ module.exports = {
     },
     devServer: {
         port: 3000,
-        writeToDisk: true
+        writeToDisk: true    //creates a dist folder   instead of just loading files in memory
     },
     optimization: {
         splitChunks: {
-            chunks: 'all'
+            chunks: 'all'    // used for code splitting
         }
     },
     plugins: [
         new htmlWebpackPlugin({
-            template: './src/index.html'
+            template: './src/index.html'   // takes this template as a reference 
         }),
-        new CleanWebpackPlugin(),
+        new CleanWebpackPlugin({
+            cleanStaleWebpackAssets: true
+        }),
         new BundleAnalyzerPlugin({
-            openAnalyzer: false
+            openAnalyzer: true 
         })
     ],
     devtool: 'inline-source-map'
 }
+
+console.log(module.exports)
